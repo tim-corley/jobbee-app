@@ -43,11 +43,11 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
-    'storages'
+    # 'storages'
     'django.contrib.gis',
     'django_filters',
 
-    'jobs.apps.JobConfig',
+    'job.apps.JobConfig',
 ]
 
 MIDDLEWARE = [
