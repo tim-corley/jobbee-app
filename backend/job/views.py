@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from .serializer import JobSerializer
 from .models import Job
 
@@ -40,3 +41,9 @@ def updateJob(request, pk):
     job.save()
     serializer = JobSerializer(job, many=False)
     return Response(serializer.data)
+
+@api_view(['DELETE'])
+def deleteJob(request, pk):
+    job = get_object_or_404(Job, id=pk)
+    job.delete()
+    return Response({ 'message': 'Job has successfully been deleted.' }, status=status.HTTP_200_OK)
