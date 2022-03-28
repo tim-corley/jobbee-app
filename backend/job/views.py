@@ -6,12 +6,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Avg, Min, Max, Count
 from .serializer import JobSerializer
+from .filters import JobsFilter
 from .models import Job
 
 @api_view(['GET'])
 def getAllJobs(request):
-    jobs = Job.objects.all()
-    serializer = JobSerializer(jobs, many=True)
+    filterset = JobsFilter(request.GET, queryset=Job.objects.all().order_by('id'))
+    serializer = JobSerializer(filterset.qs, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
