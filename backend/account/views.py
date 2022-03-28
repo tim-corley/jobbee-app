@@ -50,7 +50,7 @@ def updateUser(request):
 
     user.first_name = data['first_name']
     user.last_name = data['last_name']
-    user.username = data['username']
+    user.username = data['email']
     user.email = data['email']
 
     if data['password'] != '':
