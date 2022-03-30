@@ -5,6 +5,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+
+from .validators import validate_file_extention
 from .serializers import SignUpSerializer, UserSerializer
 
 @api_view(['POST'])
@@ -70,6 +72,11 @@ def uploadResume(request):
 
     if resume == '':
         return Response({'error': 'Please upload your resume.'})
+
+    isValidFile = validate_file_extention(resume.name)
+
+    if not isValidFile:
+        return Response({'error': 'Please ensure file type is PDF.'})
 
     serializer = UserSerializer(user, many=False)
 
