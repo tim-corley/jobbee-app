@@ -36,10 +36,13 @@ def getAllJobs(request):
 @api_view(['GET'])
 def getJob(request, pk):
     job = get_object_or_404(Job, id=pk)
+
+    # https://docs.djangoproject.com/en/4.0/ref/models/relations/#django.db.models.fields.related.RelatedManager
+    candidates = job.candidatesapplied_set.all().count()
     
     serializer = JobSerializer(job, many=False)
     
-    return Response(serializer.data)
+    return Response({'job': serializer.data, 'candidates': candidates})
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
