@@ -7,7 +7,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.db.models import Avg, Min, Max, Count
-from .serializer import JobSerializer
+from .serializer import CandidatesAppliedSerializer, JobSerializer
 from .filters import JobsFilter
 from .models import CandidatesApplied, Job
 
@@ -135,3 +135,16 @@ def applyToJob(request, pk):
     )
 
     return Response({'applied': True, 'job_id': jobApplied.id}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCurrentUserAppliedJobs(request):
+
+    args = { 'user_id': request.user.id }
+
+    jobs = CandidatesApplied.objects.filter(**args)
+
+    serializer = CandidatesAppliedSerializer(jobs, many=True)
+
+    return Response(serializer.data)
