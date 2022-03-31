@@ -1,5 +1,4 @@
-from urllib import request
-from warnings import filters
+from django.utils import timezone
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
@@ -10,7 +9,7 @@ from rest_framework import status
 from django.db.models import Avg, Min, Max, Count
 from .serializer import JobSerializer
 from .filters import JobsFilter
-from .models import Job
+from .models import CandidatesApplied, Job
 
 @api_view(['GET'])
 def getAllJobs(request):
@@ -108,3 +107,31 @@ def getTopicStats(request, topic):
     )
 
     return Response(stats)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def applyToJob(request, pk):
+
+    user = request.user
+
+    job = get_object_or_404(Job, id=pk)
+
+    if user.userprofile.resume == '':
+        return Response({'error': 'Unable to apply to job without resume uploaded. Please upload your resume and try again.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if job.lastDate < timezone.now():
+        return Response({'error': 'Unable to apply to job. Posting has been closed.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    alreadyApplied = job.candidatesapplied_set.filter(user=user).exists()
+    if alreadyApplied:
+        return Response({'error': 'Unable to apply to job. You have already applied.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    jobApplied = CandidatesApplied.objects.create(
+        job = job,
+        user = user,
+        resume = user.userprofile.resume
+    )
+
+    return Response({'applied': True, 'job_id': jobApplied.id}, status=status.HTTP_200_OK)
