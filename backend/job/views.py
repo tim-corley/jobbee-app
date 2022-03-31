@@ -159,3 +159,33 @@ def isApplied(request, pk):
     applied = job.candidatesapplied_set.filter(user=user).exists()
 
     return Response(applied)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCurrentUserJobs(request):
+
+    args = { 'user': request.user.id }
+
+    jobs = Job.objects.filter(**args)
+
+    serializer = JobSerializer(jobs, many=True)
+
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCandidatesApplied(request, pk):
+    
+    user = request.user
+
+    job = get_object_or_404(Job, id=pk)
+
+    # only the user that created the job can view candidates
+    if job.user != user:
+        return Response({'error': 'You can not access this job'}, status=status.HTTP_403_FORBIDDEN)
+
+    candidate = job.candidatesapplied_set.all()
+
+    serializer = CandidatesAppliedSerializer(candidate, many=True)
+
+    return Response(serializer.data) 
