@@ -76,7 +76,7 @@ def uploadResume(request):
     isValidFile = validate_file_extention(resume.name)
 
     if not isValidFile:
-        return Response({'error': 'Please ensure file type is PDF.'})
+        return Response({'error': 'Please ensure file type is PDF.'}, status=status.HTTP_400_BAD_REQUEST)
 
     serializer = UserSerializer(user, many=False)
 
