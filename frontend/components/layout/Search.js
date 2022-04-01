@@ -53,7 +53,6 @@ const Search = () => {
                     placeholder="Enter City, State ..."
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    required
                   />
                 </div>
               </div>
