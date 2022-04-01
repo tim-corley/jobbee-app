@@ -17,7 +17,6 @@ const JobDetails = ({ job, candidates }) => {
       zoom: 9, // starting zoom
     });
 
-    // Set Center Point
     new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
   }, []);
 
