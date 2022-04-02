@@ -38,7 +38,14 @@ const Filters = () => {
     }
   }
 
-  function checkHandler(checkBoxType, checkBoxValue) {}
+  // Ensure filters persists if/when page gets reloaded
+  function checkHandler(checkBoxType, checkBoxValue) {
+    if (typeof window !== "undefined") {
+      const value = queryParams.get(checkBoxType);
+      if (checkBoxValue === value) return true;
+      return false;
+    }
+  }
 
   return (
     <div className="sidebar mt-5">
