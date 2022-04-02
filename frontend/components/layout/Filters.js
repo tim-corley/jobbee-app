@@ -1,7 +1,42 @@
 import React from "react";
+import { useRouter } from "next/router";
 
 const Filters = () => {
-  function handleClick(checkbox) {}
+  const router = useRouter();
+  let queryParams;
+  if (typeof window !== "undefined") {
+    queryParams = new URLSearchParams(window.location.search);
+  }
+
+  function handleClick(checkbox) {
+    if (typeof window !== "undefined") {
+      const checkboxes = document.getElementsByName(checkbox.name);
+      checkboxes.forEach((item) => {
+        if (item !== checkbox) item.checked = false;
+      });
+    }
+
+    if (checkbox.checked === false) {
+      // Delete filter from query
+      if (queryParams.has(checkbox.name)) {
+        queryParams.delete(checkbox.name);
+        router.replace({
+          search: queryParams.toString(),
+        });
+      }
+    } else {
+      // Set new filter value if already there
+      if (queryParams.has(checkbox.name)) {
+        queryParams.set(checkbox.name, checkbox.value);
+      } else {
+        // Append new filter
+        queryParams.append(checkbox.name, checkbox.value);
+      }
+      router.replace({
+        search: queryParams.toString(),
+      });
+    }
+  }
 
   function checkHandler(checkBoxType, checkBoxValue) {}
 
