@@ -12,7 +12,7 @@ class JobsFilter(filters.FilterSet):
         """
         These fields allow for query params to be applied to the endpoint when making get request for jobs in order to filter results
         Ex.: http:<DOMAIN>/api/jobs/?education=Bachelors
-        http://<DOMAIN>/api/jobs/?min_salary=85000
+        http://<DOMAIN>/api/jobs/?min_salary=85000&jobType=Temporary
         """
         model = Job
         fields = ('keyword', 'location', 'education', 'jobType', 'experience', 'min_salary', 'max_salary')
