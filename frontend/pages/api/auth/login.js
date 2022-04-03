@@ -28,6 +28,7 @@ export default async (req, res) => {
             path: "/",
           }),
         ]);
+        return res.status(200).json({ success: true });
       } else {
         res.status(response.status).json({
           error: "Authentication failed.",
