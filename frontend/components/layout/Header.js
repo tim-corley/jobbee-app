@@ -5,7 +5,11 @@ import Image from "next/image";
 import AuthContext from "../../context/AuthContext";
 
 const Header = () => {
-  const { loading, user } = useContext(AuthContext);
+  const { loading, user, logout } = useContext(AuthContext);
+
+  const logoutHandler = () => {
+    logout();
+  };
 
   return (
     <div className="navWrapper">
@@ -57,10 +61,10 @@ const Header = () => {
                   <a className="dropdown-item">Upload Resume</a>
                 </Link>
 
-                <Link href="/">
+                <Link href="">
                   <a
                     className="dropdown-item text-danger"
-                    // onClick={logoutHandler}
+                    onClick={logoutHandler}
                   >
                     Logout
                   </a>
