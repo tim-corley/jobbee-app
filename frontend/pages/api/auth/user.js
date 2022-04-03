@@ -7,7 +7,7 @@ export default async (req, res) => {
     const access = cookies.access || false;
     if (!access) {
       return res.status(401).json({
-        error: "Must be logged-in to load user details.",
+        message: "Must be logged-in to load user details.",
       });
     }
     try {
