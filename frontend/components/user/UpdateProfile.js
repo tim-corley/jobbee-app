@@ -5,7 +5,7 @@ import Image from "next/image";
 import AuthContext from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
-const Register = () => {
+const UpdateProfile = ({ access_token }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,23 +13,35 @@ const Register = () => {
 
   const router = useRouter();
 
-  const { loading, error, isAuthenticated, register, clearErrors } =
-    useContext(AuthContext);
+  const {
+    updated,
+    loading,
+    error,
+    user,
+    updateProfile,
+    setUpdated,
+    clearErrors,
+  } = useContext(AuthContext);
 
   useEffect(() => {
+    if (user) {
+      setFirstName(user.first_name);
+      setLastName(user.last_name);
+      setEmail(user.email);
+    }
     if (error) {
       toast.error(error);
       clearErrors();
     }
-
-    if (isAuthenticated && !loading) {
-      router.push("/");
+    if (updated) {
+      setUpdated(false);
+      router.push("/me");
     }
-  }, [isAuthenticated, error, loading]);
+  }, [error, user, updated]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    register({ firstName, lastName, email, password });
+    updateProfile({ firstName, lastName, email, password }, access_token);
   };
 
   return (
@@ -37,13 +49,13 @@ const Register = () => {
       <div className="modalWrapper">
         <div className="left">
           <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <Image src="/images/signup.svg" alt="register" layout="fill" />
+            <Image src="/images/profile.svg" alt="register" layout="fill" />
           </div>
         </div>
         <div className="right">
           <div className="rightContentWrapper">
             <div className="headerWrapper">
-              <h2> SIGN UP</h2>
+              <h2> PROFILE</h2>
             </div>
             <form className="form" onSubmit={submitHandler}>
               <div className="inputWrapper">
@@ -89,13 +101,12 @@ const Register = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     minLength={6}
-                    required
                   />
                 </div>
               </div>
               <div className="registerButtonWrapper">
                 <button type="submit" className="registerButton">
-                  {loading ? "Loading..." : "Register"}
+                  {loading ? "Updating..." : "Update"}
                 </button>
               </div>
             </form>
@@ -106,4 +117,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default UpdateProfile;

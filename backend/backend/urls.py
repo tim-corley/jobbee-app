@@ -24,7 +24,7 @@ urlpatterns = [
     path('api/', include('job.urls')),
     path('api/', include('account.urls')),
     path('api/token/', TokenObtainPairView.as_view()),
-    path('api/token/verify', TokenVerifyView.as_view())
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
 
 handler404 = 'utils.error_views.handler404'
