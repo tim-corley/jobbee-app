@@ -187,14 +187,14 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         updated,
         uploaded,
+        login,
+        register,
+        updateProfile,
+        logout,
         setUpdated,
         setUploaded,
-        login,
-        logout,
-        register,
-        clearErrors,
-        updateProfile,
         uploadResume,
+        clearErrors,
       }}
     >
       {children}
